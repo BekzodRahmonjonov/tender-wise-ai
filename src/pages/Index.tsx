@@ -319,6 +319,109 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Testimonials */}
+      <section className="py-20 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              What Our <span className="gradient-text">Users Say</span>
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Join thousands of professionals who trust MosTender
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {[
+              {
+                name: "Bekzod Karimov",
+                role: "IT Director",
+                company: "TechSolutions LLC",
+                content: "MosTender's AI insights helped us identify the perfect tender. We won a 2B UZS contract last month!",
+                avatar: "BK"
+              },
+              {
+                name: "Aziza Nazarova", 
+                role: "Business Development",
+                company: "BuildCorp",
+                content: "Telegram notifications are game-changing. We never miss opportunities in construction anymore.",
+                avatar: "AN"
+              },
+              {
+                name: "Farrux Aminov",
+                role: "Marketing Agency Owner", 
+                company: "Digital Impact",
+                content: "The filtering system saves us hours of research. Found 3 relevant tenders in our first week.",
+                avatar: "FA"
+              }
+            ].map((testimonial, index) => (
+              <Card key={index} className="border-2 hover:border-primary/20 transition-all">
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 gradient-primary rounded-full flex items-center justify-center text-white font-bold">
+                      {testimonial.avatar}
+                    </div>
+                    <div>
+                      <div className="font-semibold">{testimonial.name}</div>
+                      <div className="text-sm text-muted-foreground">{testimonial.role}</div>
+                      <div className="text-xs text-muted-foreground">{testimonial.company}</div>
+                    </div>
+                  </div>
+                  <p className="text-muted-foreground italic">"{testimonial.content}"</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Frequently Asked <span className="gradient-text">Questions</span>
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Everything you need to know about MosTender
+            </p>
+          </div>
+          
+          <div className="max-w-3xl mx-auto space-y-4">
+            {[
+              {
+                q: "How are tenders collected?",
+                a: "We monitor official government portals, public procurement sites, and verified sources across Uzbekistan 24/7 using automated systems."
+              },
+              {
+                q: "How does AI analysis work?",
+                a: "Our AI analyzes tender documents, extracts key requirements, calculates fit scores based on your profile, and identifies opportunities and risks."
+              },
+              {
+                q: "What payment methods are supported?", 
+                a: "We accept Click, Payme, and bank transfers. All payments are processed securely with instant activation."
+              },
+              {
+                q: "Can I try before buying?",
+                a: "Yes! We offer a 14-day free trial for Pro and Premium plans with full access to all features."
+              }
+            ].map((faq, index) => (
+              <Card key={index}>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <MessageCircle className="w-5 h-5 text-primary" />
+                    {faq.q}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">{faq.a}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <Footer />
     </div>
   );

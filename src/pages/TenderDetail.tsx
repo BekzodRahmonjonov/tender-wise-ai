@@ -18,7 +18,12 @@ import {
   Lock,
   Crown,
   Eye,
-  Bell
+  Bell,
+  Hash,
+  TrendingUp,
+  CheckCircle,
+  AlertTriangle,
+  AlertCircle
 } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -250,90 +255,114 @@ export default function TenderDetail() {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* AI Insights */}
-            <Card className="border-primary/20">
+            <Card className="border-2">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Brain className="w-5 h-5 text-primary" />
-                  AI Insights
-                  {isPremiumFeature('full_ai') && (
-                    <Badge variant="outline" className="ml-auto">
-                      <Crown className="w-3 h-3 mr-1" />
-                      Premium
-                    </Badge>
-                  )}
+                  AI Analysis
+                  <Badge variant="secondary" className="ml-auto">
+                    {tender.ai_insights.confidence * 100}% confidence
+                  </Badge>
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {/* Fit Score */}
-                  <div className="text-center p-4 bg-muted/30 rounded-lg">
-                    <div className="text-sm text-muted-foreground mb-1">AI Fit Score</div>
-                    <div className={`text-3xl font-bold ${getAIScoreColor(tender.ai_insights.fit_score)}`}>
-                      {tender.ai_insights.fit_score}%
+              <CardContent className="space-y-6">
+                {/* Fit Score */}
+                <div>
+                  <h4 className="font-semibold mb-3 flex items-center gap-2">
+                    <Star className="w-4 h-4 text-accent" />
+                    Fit Score
+                  </h4>
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 bg-muted rounded-full h-3">
+                      <div 
+                        className="bg-gradient-to-r from-primary to-accent h-3 rounded-full transition-all duration-500" 
+                        style={{ width: `${tender.ai_insights.fit_score}%` }}
+                      ></div>
                     </div>
-                    <div className="text-xs text-muted-foreground">
-                      Confidence: {Math.round(tender.ai_insights.confidence * 100)}%
-                    </div>
-                  </div>
-
-                  {/* Summary */}
-                  <div>
-                    <div className="text-sm font-medium mb-2">Summary</div>
-                    {isPremiumFeature('full_ai') ? (
-                      <div className="relative">
-                        <div className="blur-sm select-none">
-                          {tender.ai_insights.summary}
-                        </div>
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <Dialog>
-                            <DialogTrigger asChild>
-                              <Button size="sm" className="gap-2">
-                                <Lock className="w-3 h-3" />
-                                Unlock Premium
-                              </Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                              <DialogHeader>
-                                <DialogTitle>Upgrade to Premium</DialogTitle>
-                                <DialogDescription>
-                                  Get full AI analysis, custom alerts, and advanced insights with Premium.
-                                </DialogDescription>
-                              </DialogHeader>
-                              <div className="flex gap-2 mt-4">
-                                <Button asChild className="flex-1">
-                                  <Link to="/pricing">Upgrade Now</Link>
-                                </Button>
-                                <Button variant="outline" className="flex-1">
-                                  Learn More
-                                </Button>
-                              </div>
-                            </DialogContent>
-                          </Dialog>
-                        </div>
-                      </div>
-                    ) : (
-                      <p className="text-sm text-muted-foreground">{tender.ai_insights.summary}</p>
-                    )}
-                  </div>
-
-                  {/* Keywords */}
-                  <div>
-                    <div className="text-sm font-medium mb-2">Key Terms</div>
-                    <div className="flex flex-wrap gap-2">
-                      {tender.ai_insights.keywords.slice(0, isPremiumFeature('full_ai') ? 2 : 4).map((keyword) => (
-                        <Badge key={keyword} variant="outline" className="text-xs">
-                          {keyword}
-                        </Badge>
-                      ))}
-                      {isPremiumFeature('full_ai') && (
-                        <Badge variant="outline" className="text-xs">
-                          <Lock className="w-3 h-3 mr-1" />
-                          +{tender.ai_insights.keywords.length - 2} more
-                        </Badge>
-                      )}
-                    </div>
+                    <span className="font-bold text-xl gradient-text">{tender.ai_insights.fit_score}%</span>
                   </div>
                 </div>
+
+                {/* Keywords */}
+                <div>
+                  <h4 className="font-semibold mb-3 flex items-center gap-2">
+                    <Hash className="w-4 h-4 text-primary" />
+                    Key Terms
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {tender.ai_insights.keywords.map((keyword) => (
+                      <Badge key={keyword} className="gradient-primary text-white border-0">{keyword}</Badge>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Opportunities - Premium Feature */}
+                <div className="relative">
+                  <h4 className="font-semibold mb-3 flex items-center gap-2">
+                    <TrendingUp className="w-4 h-4 text-accent" />
+                    Opportunities
+                    <Badge className="bg-accent text-white ml-2">Premium</Badge>
+                  </h4>
+                  <div className="space-y-2 filter blur-sm">
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
+                      <span className="text-sm">Strong alignment with your service portfolio</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
+                      <span className="text-sm">Low competition based on requirements</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
+                      <span className="text-sm">Budget range matches your typical projects</span>
+                    </div>
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Button variant="outline" size="sm">
+                      <Lock className="w-4 h-4 mr-2" />
+                      Upgrade to View
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Risks - Premium Feature */}
+                <div className="relative">
+                  <h4 className="font-semibold mb-3 flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-destructive" />
+                    Risk Assessment
+                    <Badge className="bg-accent text-white ml-2">Premium</Badge>
+                  </h4>
+                  <div className="space-y-2 filter blur-sm">
+                    <div className="flex items-start gap-2">
+                      <AlertCircle className="w-4 h-4 text-destructive mt-0.5 flex-shrink-0" />
+                      <span className="text-sm">Tight deadline may require additional resources</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <AlertCircle className="w-4 h-4 text-destructive mt-0.5 flex-shrink-0" />
+                      <span className="text-sm">Complex certification requirements</span>
+                    </div>
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Button variant="outline" size="sm">
+                      <Lock className="w-4 h-4 mr-2" />
+                      Upgrade to View
+                    </Button>
+                  </div>
+                </div>
+                
+                {/* Summary */}
+                <div>
+                  <h4 className="font-semibold mb-3 flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-primary" />
+                    Summary
+                  </h4>
+                  <p className="text-muted-foreground leading-relaxed">{tender.ai_insights.summary}</p>
+                </div>
+                
+                <Button className="w-full gradient-primary text-white border-0">
+                  <Zap className="w-4 h-4 mr-2" />
+                  Unlock Full AI Analysis - Go Premium
+                </Button>
               </CardContent>
             </Card>
 

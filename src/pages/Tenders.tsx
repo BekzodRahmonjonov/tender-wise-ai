@@ -98,7 +98,7 @@ export default function Tenders() {
           {/* Extended Filters */}
           {showFilters && (
             <CardContent className="pt-0 border-t">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
                   <label className="text-sm font-medium mb-2 block">Category</label>
                   <Select value={selectedCategory} onValueChange={setSelectedCategory}>
@@ -132,20 +132,55 @@ export default function Tenders() {
                     </SelectContent>
                   </Select>
                 </div>
-                
-                <div className="flex items-end">
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setSelectedCategory("");
-                      setSelectedSource("");
-                      setSearchQuery("");
-                    }}
-                    className="w-full"
-                  >
-                    Clear Filters
-                  </Button>
+
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Budget Range (UZS)</label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Any budget" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">Any budget</SelectItem>
+                      <SelectItem value="0-100000000">Under 100M</SelectItem>
+                      <SelectItem value="100000000-500000000">100M - 500M</SelectItem>
+                      <SelectItem value="500000000-1000000000">500M - 1B</SelectItem>
+                      <SelectItem value="1000000000+">Over 1B</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
+
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Status</label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="All statuses" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">All statuses</SelectItem>
+                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="closing-soon">Closing Soon</SelectItem>
+                      <SelectItem value="expired">Expired</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              
+              <div className="mt-4 flex gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setSelectedCategory("");
+                    setSelectedSource("");
+                    setSearchQuery("");
+                  }}
+                  className="flex-1"
+                >
+                  Clear All Filters
+                </Button>
+                <Button variant="outline" className="flex-1">
+                  <Filter className="w-4 h-4 mr-2" />
+                  Save Filter
+                </Button>
               </div>
             </CardContent>
           )}

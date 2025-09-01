@@ -11,7 +11,8 @@ import {
   Bell,
   MessageCircle,
   Zap,
-  ArrowRight
+  ArrowRight,
+  Plus
 } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -157,35 +158,97 @@ export default function Categories() {
           </Card>
         )}
 
+        {/* Top Categories This Week */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold mb-6">
+            🔥 <span className="gradient-text">Trending This Week</span>
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            {[
+              { name: "IT Services", count: 24 },
+              { name: "Construction", count: 18 },
+              { name: "Healthcare", count: 12 },
+              { name: "Education", count: 9 }
+            ].map((trending) => (
+              <Card key={trending.name} className="border-2 hover:border-primary/20 transition-all">
+                <CardContent className="p-4 text-center">
+                  <div className="text-2xl font-bold gradient-text">{trending.count}</div>
+                  <div className="text-sm text-muted-foreground">{trending.name}</div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+
         {/* Categories Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
-          {filteredCategories.map((category) => {
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {filteredCategories.map((category, index) => {
+            const activeTenders = Math.floor(Math.random() * 20) + 5;
+            const subcategories = [
+              ["Web Development", "System Administration", "Cybersecurity"],
+              ["Infrastructure", "Architecture", "Engineering"],
+              ["Training Programs", "Curriculum Development", "E-learning"],
+              ["Medical Equipment", "Pharmaceutical", "Healthcare IT"],
+              ["Digital Marketing", "Brand Strategy", "PR Services"],
+              ["Power Systems", "Renewable Energy", "Grid Infrastructure"],
+              ["Logistics", "Fleet Management", "Supply Chain"],
+              ["Equipment Maintenance", "Technical Support", "Installation"]
+            ][index] || ["General Services", "Consulting", "Support"];
             const isSelected = selectedCategories.includes(category);
+
             return (
-              <Card
+              <Card 
                 key={category}
-                className={`cursor-pointer transition-all duration-200 hover:shadow-md ${
-                  isSelected 
-                    ? "border-primary bg-primary/5 shadow-sm" 
-                    : "border-border hover:border-primary/20"
+                className={`cursor-pointer border-2 transition-all duration-300 hover:scale-105 ${
+                  isSelected
+                    ? "border-primary shadow-glow bg-primary/5"
+                    : "border-border hover:border-primary/20 hover:shadow-lg"
                 }`}
                 onClick={() => toggleCategory(category)}
               >
-                <CardContent className="p-4 text-center">
-                  <div className={`w-12 h-12 mx-auto mb-3 rounded-lg flex items-center justify-center ${
-                    isSelected ? "gradient-primary" : "bg-muted"
+                <CardHeader className="text-center pb-4">
+                  <div className={`w-16 h-16 mx-auto mb-4 rounded-xl flex items-center justify-center ${
+                    isSelected
+                      ? "gradient-primary text-white"
+                      : "bg-muted text-muted-foreground"
                   }`}>
-                    {isSelected ? (
-                      <Check className="w-6 h-6 text-white" />
-                    ) : (
-                      <Zap className="w-6 h-6 text-muted-foreground" />
-                    )}
+                    <span className="text-2xl">
+                      {["💻", "🏗️", "📚", "🏥", "📢", "⚡", "🚛", "🔧"][index] || "📋"}
+                    </span>
                   </div>
-                  <h3 className={`font-medium text-sm ${
-                    isSelected ? "text-primary" : "text-foreground"
-                  }`}>
-                    {category}
-                  </h3>
+                  <CardTitle className="text-lg">{category}</CardTitle>
+                  <Badge variant="secondary" className="mx-auto">
+                    {activeTenders} active tenders
+                  </Badge>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="mb-4">
+                    <div className="text-xs text-muted-foreground mb-2">Popular subcategories:</div>
+                    <div className="flex flex-wrap gap-1">
+                      {subcategories.slice(0, 3).map((sub) => (
+                        <Badge key={sub} variant="outline" className="text-xs">
+                          {sub}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                  <Button 
+                    variant={isSelected ? "default" : "outline"}
+                    size="sm"
+                    className={isSelected ? "gradient-primary text-white border-0 w-full" : "w-full"}
+                  >
+                    {isSelected ? (
+                      <>
+                        <Check className="w-4 h-4 mr-2" />
+                        Subscribed
+                      </>
+                    ) : (
+                      <>
+                        <Plus className="w-4 h-4 mr-2" />
+                        Subscribe
+                      </>
+                    )}
+                  </Button>
                 </CardContent>
               </Card>
             );

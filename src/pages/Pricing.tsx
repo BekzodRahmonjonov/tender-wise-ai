@@ -279,36 +279,72 @@ export default function Pricing() {
           ))}
         </div>
 
-        {/* Feature Comparison */}
+        {/* Feature Comparison Table */}
         <div className="mb-20">
           <h2 className="text-3xl font-bold text-center mb-12">
             Feature <span className="gradient-text">Comparison</span>
           </h2>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {features.map((feature, index) => (
-              <Card key={index} className="border-2 hover:border-primary/20 transition-all">
-                <CardHeader>
-                  <div className="w-10 h-10 bg-primary/10 text-primary rounded-lg flex items-center justify-center mb-3">
-                    <feature.icon className="w-5 h-5" />
-                  </div>
-                  <CardTitle className="text-lg">{feature.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground text-sm mb-4">
-                    {feature.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {feature.plans.map((plan) => (
-                      <Badge key={plan} variant="secondary" className="text-xs">
-                        {plan}
-                      </Badge>
+          <Card className="max-w-4xl mx-auto">
+            <CardContent className="p-0">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b">
+                      <th className="text-left p-4 font-semibold">Features</th>
+                      <th className="text-center p-4 font-semibold">Free</th>
+                      <th className="text-center p-4 font-semibold text-primary">Pro</th>
+                      <th className="text-center p-4 font-semibold text-accent">Premium</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { feature: "Tender Listings", free: true, pro: true, premium: true },
+                      { feature: "Basic Search & Filters", free: true, pro: true, premium: true },
+                      { feature: "PDF Documents", free: true, pro: true, premium: true },
+                      { feature: "Telegram Notifications", free: false, pro: true, premium: true },
+                      { feature: "Category Subscriptions", free: false, pro: true, premium: true },
+                      { feature: "Advanced Filters", free: false, pro: true, premium: true },
+                      { feature: "Unlimited Views", free: false, pro: true, premium: true },
+                      { feature: "Email Alerts", free: false, pro: true, premium: true },
+                      { feature: "Export to Excel/PDF", free: false, pro: true, premium: true },
+                      { feature: "Full AI Analysis", free: false, pro: false, premium: true },
+                      { feature: "Opportunity Scoring", free: false, pro: false, premium: true },
+                      { feature: "Risk Assessment", free: false, pro: false, premium: true },
+                      { feature: "API Access", free: false, pro: false, premium: true },
+                      { feature: "Team Collaboration", free: false, pro: false, premium: true },
+                      { feature: "Dedicated Support", free: false, pro: false, premium: true }
+                    ].map((row, index) => (
+                      <tr key={index} className="border-b border-border/50">
+                        <td className="p-4 font-medium">{row.feature}</td>
+                        <td className="p-4 text-center">
+                          {row.free ? (
+                            <Check className="w-5 h-5 text-accent mx-auto" />
+                          ) : (
+                            <span className="text-muted-foreground">–</span>
+                          )}
+                        </td>
+                        <td className="p-4 text-center">
+                          {row.pro ? (
+                            <Check className="w-5 h-5 text-primary mx-auto" />
+                          ) : (
+                            <span className="text-muted-foreground">–</span>
+                          )}
+                        </td>
+                        <td className="p-4 text-center">
+                          {row.premium ? (
+                            <Check className="w-5 h-5 text-accent mx-auto" />
+                          ) : (
+                            <span className="text-muted-foreground">–</span>
+                          )}
+                        </td>
+                      </tr>
                     ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* FAQ Section */}
