@@ -1,0 +1,253 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { 
+  Search, 
+  Crown, 
+  Check, 
+  Bell,
+  MessageCircle,
+  Zap,
+  ArrowRight
+} from "lucide-react";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
+import { categories, mockUser } from "@/data/mockData";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+
+export default function Categories() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(mockUser.categories);
+
+  const filteredCategories = categories.filter(category => 
+    category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const toggleCategory = (category: string) => {
+    setSelectedCategories(prev => 
+      prev.includes(category) 
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    );
+  };
+
+  const needsUpgrade = mockUser.plan === 'free' && selectedCategories.length > 0;
+
+  const PaywallModal = () => (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button size="lg" className="gradient-primary text-white border-0">
+          <Bell className="w-4 h-4 mr-2" />
+          Subscribe to {selectedCategories.length} {selectedCategories.length === 1 ? 'Category' : 'Categories'}
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <Crown className="w-5 h-5 text-primary" />
+            Upgrade Required
+          </DialogTitle>
+          <DialogDescription>
+            Category notifications are available with Pro and Premium plans.
+          </DialogDescription>
+        </DialogHeader>
+        
+        <div className="space-y-4">
+          <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
+            <h4 className="font-semibold text-primary mb-2">Pro Plan - 49,000 UZS/month</h4>
+            <ul className="text-sm space-y-1">
+              <li className="flex items-center gap-2">
+                <Check className="w-3 h-3 text-accent" />
+                Telegram notifications
+              </li>
+              <li className="flex items-center gap-2">
+                <Check className="w-3 h-3 text-accent" />
+                Category subscriptions
+              </li>
+              <li className="flex items-center gap-2">
+                <Check className="w-3 h-3 text-accent" />
+                Advanced filters
+              </li>
+            </ul>
+          </div>
+          
+          <div className="flex gap-2">
+            <Button asChild className="flex-1 gradient-primary text-white border-0">
+              <Link to="/pricing">
+                Upgrade to Pro
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Link>
+            </Button>
+            <Button variant="outline" className="flex-1">
+              Learn More
+            </Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">
+            Choose Your <span className="gradient-text">Categories</span>
+          </h1>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            Select the categories you're interested in and get instant notifications when new tenders are published.
+          </p>
+        </div>
+
+        {/* Search Bar */}
+        <Card className="mb-8">
+          <CardContent className="pt-6">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+              <Input
+                placeholder="Search categories..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Selected Categories */}
+        {selectedCategories.length > 0 && (
+          <Card className="mb-8 border-primary/20 bg-primary/5">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Bell className="w-5 h-5" />
+                Selected Categories ({selectedCategories.length})
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {selectedCategories.map((category) => (
+                  <Badge
+                    key={category}
+                    className="bg-primary text-primary-foreground cursor-pointer hover:bg-primary/80"
+                    onClick={() => toggleCategory(category)}
+                  >
+                    {category}
+                    <button className="ml-2 hover:text-primary-foreground/80">×</button>
+                  </Badge>
+                ))}
+              </div>
+              
+              <div className="text-center">
+                {needsUpgrade ? (
+                  <PaywallModal />
+                ) : (
+                  <Button size="lg" className="gradient-primary text-white border-0">
+                    <MessageCircle className="w-4 h-4 mr-2" />
+                    Update Notifications
+                  </Button>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Categories Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
+          {filteredCategories.map((category) => {
+            const isSelected = selectedCategories.includes(category);
+            return (
+              <Card
+                key={category}
+                className={`cursor-pointer transition-all duration-200 hover:shadow-md ${
+                  isSelected 
+                    ? "border-primary bg-primary/5 shadow-sm" 
+                    : "border-border hover:border-primary/20"
+                }`}
+                onClick={() => toggleCategory(category)}
+              >
+                <CardContent className="p-4 text-center">
+                  <div className={`w-12 h-12 mx-auto mb-3 rounded-lg flex items-center justify-center ${
+                    isSelected ? "gradient-primary" : "bg-muted"
+                  }`}>
+                    {isSelected ? (
+                      <Check className="w-6 h-6 text-white" />
+                    ) : (
+                      <Zap className="w-6 h-6 text-muted-foreground" />
+                    )}
+                  </div>
+                  <h3 className={`font-medium text-sm ${
+                    isSelected ? "text-primary" : "text-foreground"
+                  }`}>
+                    {category}
+                  </h3>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+
+        {/* Empty State */}
+        {filteredCategories.length === 0 && (
+          <Card className="text-center py-12">
+            <CardContent>
+              <Search className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2">No categories found</h3>
+              <p className="text-muted-foreground mb-4">
+                Try a different search term
+              </p>
+              <Button onClick={() => setSearchQuery("")}>
+                Clear Search
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* How It Works */}
+        <Card className="mt-12">
+          <CardHeader>
+            <CardTitle className="text-center">How Category Notifications Work</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-3 gap-6 text-center">
+              <div>
+                <div className="w-12 h-12 gradient-primary rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <span className="text-white font-bold">1</span>
+                </div>
+                <h4 className="font-semibold mb-2">Select Categories</h4>
+                <p className="text-sm text-muted-foreground">
+                  Choose the categories that match your business interests
+                </p>
+              </div>
+              <div>
+                <div className="w-12 h-12 gradient-primary rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <span className="text-white font-bold">2</span>
+                </div>
+                <h4 className="font-semibold mb-2">Connect Telegram</h4>
+                <p className="text-sm text-muted-foreground">
+                  Link your Telegram account to receive instant notifications
+                </p>
+              </div>
+              <div>
+                <div className="w-12 h-12 gradient-primary rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <span className="text-white font-bold">3</span>
+                </div>
+                <h4 className="font-semibold mb-2">Get Notified</h4>
+                <p className="text-sm text-muted-foreground">
+                  Receive instant alerts when relevant tenders are published
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Footer />
+    </div>
+  );
+}
